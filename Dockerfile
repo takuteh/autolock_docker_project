@@ -10,8 +10,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 USER root    
 
 # redユーザーを作成し、必要な設定を行う
-RUN useradd -m -G video,i2c,sudo -s /bin/bash red && \
-    echo "pi:raspberry" | chpasswd && \
+RUN echo "pi:raspberry" | chpasswd && \
     echo "pi ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 
 RUN chown -R pi:pi /home/pi
@@ -24,7 +23,7 @@ RUN apt update && \
     git \
     cmake \
     pigpio \
-    mosquitto \
+    mosquitto-clients \
     libmosquitto-dev \
     libcurl4-openssl-dev
 

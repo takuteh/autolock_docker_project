@@ -2,10 +2,25 @@
 version: "3" # Docker Composeのバージョン
 
 services:
-  ServiceName: # サービスの名前
+  autolock: # サービスの名前
     container_name: autolock
     build:
       context: . # Dockerfileが存在するディレクトリを指定
       dockerfile: Dockerfile # 使用するDockerfileを指定
     image: autolock_img
     privileged: true # 特権モードを有効にする
+    networks:
+      - test
+
+  mqtt_broker: # サービスの名前
+    container_name: autolock_mqtt_broker
+    build:
+      context: . # Dockerfileが存在するディレクトリを指定
+      dockerfile: ./mqtt_broker/Dockerfile # 使用するDockerfileを指定
+    image: autolock_mqtt_broker
+    networks:
+      - test
+
+networks:
+  test:
+    external: true
