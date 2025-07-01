@@ -3,24 +3,41 @@ version: "3" # Docker Composeのバージョン
 
 services:
   autolock: # サービスの名前
-    container_name: autolock
+    container_name: autolock_main
     build:
-      context: . # Dockerfileが存在するディレクトリを指定
+      context: autolock_main # Dockerfileが存在するディレクトリを指定
       dockerfile: Dockerfile # 使用するDockerfileを指定
-    image: autolock_img
+    image: autolock_main_img
     privileged: true # 特権モードを有効にする
     networks:
-      - test
+      - autolock_net
 
   mqtt_broker: # サービスの名前
     container_name: autolock_mqtt_broker
     build:
-      context: . # Dockerfileが存在するディレクトリを指定
-      dockerfile: ./mqtt_broker/Dockerfile # 使用するDockerfileを指定
-    image: autolock_mqtt_broker
+      context: mqtt_broker # Dockerfileが存在するディレクトリを指定
+      dockerfile: Dockerfile # 使用するDockerfileを指定
+    image: autolock_mqtt_broker_img
+    ports:
+      - "1883:1883" #mqtt
     networks:
-      - test
+      - autolock_net
+
+  auth_db:
+    container_name: autolock_auth_db
+    image: mariadb:latest
+    environment:
+      MARIADB_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWORD}
+      MARIADB_DATABASE: ${MARIADB_DATABASE}
+      MARIADB_USER: ${MARIADB_USER}
+      MARIADB_PASSWORD: ${MARIADB_PASSWORD}
+    volumes:
+      - auth_db_volume:/var/lib/mysql
+    networks:
+      - autolock_net
 
 networks:
-  test:
-    external: true
+  autolock_net:
+
+volumes:
+  auth_db_volume:

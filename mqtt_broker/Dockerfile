@@ -24,15 +24,15 @@ RUN apt update && \
     mosquitto-clients 
 
 #mosquitto関連の設定
-COPY ./mqtt_broker/mosquitto_setting.sh /home/pi
+COPY mosquitto_setting.sh /home/pi
 RUN chmod +x /home/pi/mosquitto_setting.sh
 RUN sh mosquitto_setting.sh
 RUN mkdir /run/mosquitto && \
     chown mosquitto:mosquitto /run/mosquitto
 
-COPY ./mqtt_broker/supervisor/supervisor.conf /etc/supervisor/supervisord.conf
-COPY ./mqtt_broker/supervisor/conf.d/* /etc/supervisor/conf.d/
-COPY ./mqtt_broker/entry.sh /entry.sh
+COPY supervisor/supervisor.conf /etc/supervisor/supervisord.conf
+COPY supervisor/conf.d/* /etc/supervisor/conf.d/
+COPY entry.sh /entry.sh
 RUN chmod +x /entry.sh
 # 必要に応じて他の設定やコマンドを追加
 CMD ["supervisord","-c", "/etc/supervisor/supervisord.conf"]
