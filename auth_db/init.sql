@@ -1,0 +1,8 @@
+CREATE TABLE IF NOT EXISTS users(
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_name VARCHAR(50) NOT NULL,
+    line_id VARCHAR(50), 
+    slack_id VARCHAR(50),
+    start_date DATETIME DEFAULT '2000-01-01 00:00:00', 
+    end_date DATETIME DEFAULT '9999-12-31 23:59:59'
+);

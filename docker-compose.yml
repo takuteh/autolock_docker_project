@@ -33,6 +33,7 @@ services:
       MARIADB_PASSWORD: ${MARIADB_PASSWORD}
     volumes:
       - auth_db_volume:/var/lib/mysql
+      - ./auth_db:/docker-entrypoint-initdb.d
     networks:
       - autolock_net
 

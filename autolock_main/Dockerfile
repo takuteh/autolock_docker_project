@@ -21,11 +21,13 @@ RUN apt update && \
     apt install -y \
     supervisor \
     git \
+    g++\
     cmake \
     pigpio \
     mosquitto-clients \
     libmosquitto-dev \
-    libcurl4-openssl-dev
+    libcurl4-openssl-dev\
+    libmysqlcppconn-dev
 
 COPY ./supervisor/supervisor.conf /etc/supervisor/supervisord.conf
 COPY ./supervisor/conf.d/* /etc/supervisor/conf.d/
