@@ -37,6 +37,17 @@ services:
     networks:
       - autolock_net
 
+  nodejs:
+    container_name: autolock_nodejs
+    build:
+      context: nodejs
+      dockerfile: Dockerfile
+    image: autolock_nodejs_img
+    ports:
+      - "3000:3000"
+    networks:
+      - autolock_net
+
 networks:
   autolock_net:
 
