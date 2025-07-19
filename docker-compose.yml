@@ -9,6 +9,8 @@ services:
       dockerfile: Dockerfile # 使用するDockerfileを指定
     image: autolock_main_img
     privileged: true # 特権モードを有効にする
+    volumes:
+      - autolock_setting_volume:/home/pi/autolock/gear_version/etc
     networks:
       - autolock_net
 
@@ -53,3 +55,4 @@ networks:
 
 volumes:
   auth_db_volume:
+  autolock_setting_volume:
