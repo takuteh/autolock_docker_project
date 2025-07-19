@@ -1,12 +1,13 @@
 # autolock_docker_project
 autolockの環境をdockerに移植するプロジェクト
 ## システム構成
-<img width="981" height="537" alt="スクリーンショット 2025-07-19 21 35 22" src="https://github.com/user-attachments/assets/96955d4c-9803-41d4-bf5c-74a16d9af5ee" />
+<img width="983" height="541" alt="スクリーンショット 2025-07-19 23 02 53" src="https://github.com/user-attachments/assets/850b347f-8bce-47e3-907b-1dddfdc16660" />
+
 
 ※コンテナ間で連携するため、コンテナは全て共通のブリッジネットワークに属する
-### Nginxコンテナ  
+### Node.Js+Expressコンテナ  
 - オートロックの操作をLINEやSlack等のアプリで行うためwebhookを受信する部分や設定変更を行うwebアプリの配信を担当する  
-- Nginxを3000番ポートで待ち受け、起動している  
+- Expressでサーバーを起動し、3000番ポートで待ち受けている  
 - 3000番ポートはホストの3000番ポートにマッピングしている  
 ### MQTT Brokerコンテナ  
 - 内部のAPIはMQTTで実装しているため、NginxとAutolockのデータ送受信、ローカルでのMQTT送受信の中継をしている  
