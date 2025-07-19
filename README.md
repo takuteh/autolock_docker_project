@@ -1,8 +1,7 @@
 # autolock_docker_project
 autolockの環境をdockerに移植するプロジェクト
 ## システム構成
-<img width="983" height="541" alt="スクリーンショット 2025-07-19 23 02 53" src="https://github.com/user-attachments/assets/850b347f-8bce-47e3-907b-1dddfdc16660" />
-
+<img width="986" height="535" alt="スクリーンショット 2025-07-19 23 07 36" src="https://github.com/user-attachments/assets/3a0c5ce6-b46a-487b-bcca-cc97a81e76b2" />
 
 ※コンテナ間で連携するため、コンテナは全て共通のブリッジネットワークに属する
 ### Node.Js+Expressコンテナ  
