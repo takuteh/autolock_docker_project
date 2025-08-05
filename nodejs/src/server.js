@@ -1,5 +1,6 @@
 const express = require("express");
 const app = express();
+const path = require("path");
 
 const webhookRoutes = require("./webhook");
 const webappRoutes = require("./autolock_web_app.js");
@@ -19,8 +20,11 @@ mqttClient
   });
 
 app.use(express.json());
+
+// public フォルダを静的公開
+app.use("/webapp", express.static("/app/autolock_setting_webapp"));
 app.use("/webhook", webhookRoutes);
-app.use("/webapp", webappRoutes);
+app.use("/webapp_end", webappRoutes);
 
 app.listen(3000, () => {
   console.log("Server listening on port 3000");

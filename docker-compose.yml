@@ -45,11 +45,17 @@ services:
       context: nodejs
       dockerfile: Dockerfile
     image: autolock_nodejs_img
+    environment:
+      MARIADB_DATABASE: ${MARIADB_DATABASE}
+      MARIADB_USER: ${MARIADB_USER}
+      MARIADB_PASSWORD: ${MARIADB_PASSWORD}
+      BASE_URL: ${BASE_URL}
     ports:
       - "3000:3000"
     networks:
       - autolock_net
-
+    # volumes:
+    #   - /home/takumi/webapp:/app
 networks:
   autolock_net:
 
