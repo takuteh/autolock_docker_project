@@ -11,13 +11,18 @@ const config = config_class.getConfig();
 router.post("/post", (req, res) => {
   let currentData = {};
   const newData = req.body;
+  convertStringBools(newData);
   console.log(newData);
+  const wrappedData = {
+    setting_content: {
+      main: newData,
+    },
+  };
   mqtt_client.publish(
     config.mqtt.subscribe.change_config.topic,
-    JSON.stringify(newData)
+    JSON.stringify(wrappedData)
   );
   res.send(config.mqtt.subscribe.change_config.topic);
-  //res.sendStatus(200);
 });
 
 router.get("/get", (req, res) => {
@@ -45,7 +50,7 @@ router.post("/users/post", async (req, res) => {
     await conn.beginTransaction();
 
     for (const user of payload) {
-      // 🔒 user_name が未定義 or 空文字ならスキップ
+      //user_name が未定義 or 空文字ならスキップ
       if (!user.user_name || user.user_name.trim() === "") {
         console.warn("スキップ: user_name が未定義または空です");
         continue;
@@ -109,6 +114,19 @@ router.post("/users/post", async (req, res) => {
 function toMySQLDatetime(dateString) {
   const date = new Date(dateString);
   return date.toISOString().slice(0, 19).replace("T", " ");
+}
+
+//bool値にもダブルクォートがついてるので外す
+function convertStringBools(obj) {
+  for (const key in obj) {
+    if (typeof obj[key] === "object" && obj[key] !== null) {
+      convertStringBools(obj[key]); // 再帰的に
+    } else if (obj[key] === "true") {
+      obj[key] = true;
+    } else if (obj[key] === "false") {
+      obj[key] = false;
+    }
+  }
 }
 
 module.exports = router;

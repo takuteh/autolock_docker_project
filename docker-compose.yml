@@ -1,5 +1,4 @@
-#このファイルは手動で変更しない
-version: "3" # Docker Composeのバージョン
+version: "3"
 
 services:
   autolock: # サービスの名前
@@ -14,11 +13,11 @@ services:
     networks:
       - autolock_net
 
-  mqtt_broker: # サービスの名前
+  mqtt_broker:
     container_name: autolock_mqtt_broker
     build:
-      context: mqtt_broker # Dockerfileが存在するディレクトリを指定
-      dockerfile: Dockerfile # 使用するDockerfileを指定
+      context: mqtt_broker
+      dockerfile: Dockerfile
     image: autolock_mqtt_broker_img
     ports:
       - "1883:1883" #mqtt
@@ -54,8 +53,7 @@ services:
       - "3000:3000"
     networks:
       - autolock_net
-    # volumes:
-    #   - /home/takumi/webapp:/app
+
 networks:
   autolock_net:
 
