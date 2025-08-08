@@ -1,8 +1,6 @@
 const express = require("express");
 const app = express();
-const path = require("path");
 
-const webhookRoutes = require("./webhook");
 const webappRoutes = require("./autolock_web_app.js");
 const config = require("./config");
 const mqttClient = require("./mqtt_client");
@@ -23,7 +21,6 @@ app.use(express.json());
 
 // public フォルダを静的公開
 app.use("/webapp", express.static("/app/autolock_setting_webapp"));
-app.use("/webhook", webhookRoutes);
 app.use("/webapp_end", webappRoutes);
 
 app.listen(3000, () => {

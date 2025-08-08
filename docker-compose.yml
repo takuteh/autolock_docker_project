@@ -38,17 +38,28 @@ services:
     networks:
       - autolock_net
 
-  nodejs:
-    container_name: autolock_nodejs
+  setting_webapp:
+    container_name: autolock_setting_webapp
     build:
-      context: nodejs
+      context: setting_webapp
       dockerfile: Dockerfile
-    image: autolock_nodejs_img
+    image: autolock_webapp_img
     environment:
       MARIADB_DATABASE: ${MARIADB_DATABASE}
       MARIADB_USER: ${MARIADB_USER}
       MARIADB_PASSWORD: ${MARIADB_PASSWORD}
       BASE_URL: ${BASE_URL}
+    ports:
+      - "8080:3000"
+    networks:
+      - autolock_net
+
+  webhook:
+    container_name: autolock_webhook
+    build:
+      context: webhook
+      dockerfile: Dockerfile
+    image: autolock_webhook
     ports:
       - "3000:3000"
     networks:
