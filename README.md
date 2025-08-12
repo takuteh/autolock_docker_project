@@ -27,3 +27,4 @@
 ## 注意点
 - Autolockコンテナでautolockリポジトリのcloneを行うが、設定ファイル(autolock_setting.json)のmqtt_brokerの値がデフォルト値ではlocalhostになっているため、`autolock_mqtt_broker`に修正してから起動し直す必要がある
 - GPIOをAutolockコンテナが占有するため、ホストOSや他のコンテナでGPIOの使用ができない、またホストでpigpio等のGPIOを操作するライブラリ等が起動していると、うまくコンテナが動作しない可能性があるため、停止する必要がある
+- ビルド前に`env_template`を`.env`にコピーし`BASE_URL`のyour_domain.comの部分をホストのipに書き換える必要がある

@@ -12,6 +12,7 @@ services:
       - autolock_setting_volume:/home/pi/autolock/gear_version/etc
     networks:
       - autolock_net
+    restart: always
 
   mqtt_broker:
     container_name: autolock_mqtt_broker
@@ -23,6 +24,7 @@ services:
       - "1883:1883" #mqtt
     networks:
       - autolock_net
+    restart: always
 
   auth_db:
     container_name: autolock_auth_db
@@ -37,6 +39,7 @@ services:
       - ./auth_db:/docker-entrypoint-initdb.d
     networks:
       - autolock_net
+    restart: always
 
   setting_webapp:
     container_name: autolock_setting_webapp
@@ -53,6 +56,7 @@ services:
       - "8080:3000"
     networks:
       - autolock_net
+    restart: always
 
   webhook:
     container_name: autolock_webhook
@@ -64,6 +68,7 @@ services:
       - "3000:3000"
     networks:
       - autolock_net
+    restart: always
 
 networks:
   autolock_net:
