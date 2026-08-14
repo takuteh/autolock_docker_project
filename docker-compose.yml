@@ -9,7 +9,7 @@ services:
     image: autolock_main_img
     privileged: true # 特権モードを有効にする
     volumes:
-      - autolock_setting_volume:/home/pi/autolock/gear_version/etc
+      - ./config/autolock_setting.json:/home/pi/autolock/gear_version/etc:ro
     networks:
       - autolock_net
     restart: always
@@ -52,6 +52,8 @@ services:
       MARIADB_USER: ${MARIADB_USER}
       MARIADB_PASSWORD: ${MARIADB_PASSWORD}
       BASE_URL: ${BASE_URL}
+    volumes:
+      - ./config/autolock_setting.json:/app/etc:rw
     ports:
       - "8080:3000"
     networks:
@@ -75,4 +77,3 @@ networks:
 
 volumes:
   auth_db_volume:
-  autolock_setting_volume:

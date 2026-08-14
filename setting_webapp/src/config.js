@@ -2,7 +2,7 @@ const fs = require("fs");
 const path = require("path");
 
 let sharedContent = null;
-let config_file = path.resolve(__dirname, "../etc/clone_autolock_setting.json");
+let config_file = path.resolve(__dirname, "../etc/autolock_setting.json");
 
 function setConfigFile(filename) {
   config_file = path.resolve(__dirname, filename);

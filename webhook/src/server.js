@@ -4,8 +4,8 @@ const app = express();
 const webhookRoutes = require("./webhook");
 const config = require("./config");
 const mqttClient = require("./mqtt_client");
-// 最初にクローンファイルを読み込んで設定取得
-config.setConfigFile("../etc/clone_autolock_setting.json");
+// 最初に設定ファイルを読み込んで設定取得
+config.setConfigFile("../etc/autolock_setting.json");
 
 mqttClient
   .init()

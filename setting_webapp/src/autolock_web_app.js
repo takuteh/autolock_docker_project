@@ -2,7 +2,6 @@ const fs = require("fs");
 const _ = require("lodash");
 const express = require("express");
 const router = express.Router();
-const mqtt_client = require("./mqtt_client");
 const config_class = require("./config");
 const pool = require("./db");
 
@@ -18,15 +17,10 @@ router.post("/post", (req, res) => {
       main: newData,
     },
   };
-  mqtt_client.publish(
-    config.mqtt.subscribe.change_config.topic,
-    JSON.stringify(wrappedData)
-  );
-  res.send(config.mqtt.subscribe.change_config.topic);
 });
 
 router.get("/get", (req, res) => {
-  fs.readFile("/app/etc/clone_autolock_setting.json", "utf8", (err, data) => {
+  fs.readFile("/app/etc/autolock_setting.json", "utf8", (err, data) => {
     const jsonData = JSON.parse(data);
     res.json(jsonData);
   });
