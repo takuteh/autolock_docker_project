@@ -1,29 +1,38 @@
-const fs = require("fs");
 const _ = require("lodash");
 const express = require("express");
 const router = express.Router();
 const config_class = require("./config");
 const pool = require("./db");
 
-const config = config_class.getConfig();
-
+//webappからPOSTされた設定内容をautolock_setting.jsonにmerge
 router.post("/post", (req, res) => {
-  let currentData = {};
-  const newData = req.body;
-  convertStringBools(newData);
-  console.log(newData);
-  const wrappedData = {
-    setting_content: {
-      main: newData,
-    },
-  };
-});
+  try {
+    const newData = req.body;
+    convertStringBools(newData);
+    const currentData = config_class.getConfig();
+    const mergedData = _.merge({}, currentData, newData);
+    config_class.setConfig(mergedData);
+    res.status(200).json(mergedData);
+  } catch (err) {
+    console.error(err);
+    res
+      .status(500)
+      .json({ error: "設定ファイルの更新に失敗しました", detail: err.message });
+  }
+}); 
 
+//autolock_setting.jsonの内容をすべて返す
 router.get("/get", (req, res) => {
-  fs.readFile("/app/etc/autolock_setting.json", "utf8", (err, data) => {
-    const jsonData = JSON.parse(data);
-    res.json(jsonData);
-  });
+  try {
+    const config = config_class.getConfig();
+    res.json(config);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({
+      error: "設定ファイルの取得に失敗しました",
+      detail: err.message,
+    });
+  }
 });
 
 router.get("/users/get", async (req, res) => {
@@ -59,7 +68,7 @@ router.post("/users/post", async (req, res) => {
       // ① 名前が存在するかチェック
       const [rows] = await conn.query(
         "SELECT id FROM users WHERE id = ? LIMIT 1",
-        [user.id]
+        [user.id],
       );
 
       const startDate = toMySQLDatetime(user.start_date);
@@ -82,14 +91,14 @@ router.post("/users/post", async (req, res) => {
             startDate,
             endDate,
             user.id,
-          ]
+          ],
         );
       } else {
         // ③ 無い → INSERT
         await conn.query(
           `INSERT INTO users (user_name, line_id, slack_id, start_date, end_date)
            VALUES (?, ?, ?, ?, ?)`,
-          [user.user_name, user.line_id, user.slack_id, startDate, endDate]
+          [user.user_name, user.line_id, user.slack_id, startDate, endDate],
         );
       }
     }
