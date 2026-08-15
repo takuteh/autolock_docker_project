@@ -1,0 +1,24 @@
+version: "3"
+
+services:
+  setting_webapp:
+    container_name: autolock_setting_webapp
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: autolock_webapp_img
+    environment:
+      MARIADB_DATABASE: ${MARIADB_DATABASE}
+      MARIADB_USER: ${MARIADB_USER}
+      MARIADB_PASSWORD: ${MARIADB_PASSWORD}
+      BASE_URL: ${BASE_URL}
+    volumes:
+      - ../config/autolock_setting.json:/app/etc/autolock_setting.json:rw
+    ports:
+      - "8080:3000"
+    networks:
+      - autolock_net
+    restart: always
+
+networks:
+  autolock_net:
