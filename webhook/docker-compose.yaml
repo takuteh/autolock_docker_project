@@ -1,0 +1,19 @@
+version: "3"
+
+services:
+  webhook:
+    container_name: autolock_webhook
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: autolock_webhook
+    volumes:
+      - ../config/autolock_setting.json:/app/etc/autolock_setting.json:ro
+    ports:
+      - "3000:3000"
+    networks:
+      - autolock_net
+    restart: always
+
+networks:
+  autolock_net:
