@@ -1,0 +1,8 @@
+{
+  "host": "autolock_auth_db",
+  "port": 3306,
+  "user": "pi",
+  "password": "raspberry",
+  "database": "autolock_user",
+  "table": "users"
+}

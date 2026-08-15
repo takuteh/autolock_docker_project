@@ -10,6 +10,7 @@ services:
     privileged: true # 特権モードを有効にする
     volumes:
       - ./config/autolock_setting.json:/home/pi/autolock/gear_version/etc/autolock_setting.json:ro
+      - ./config/authorize_db_setting.json:/home/pi/autolock/gear_version/etc/authorize_db_setting.json:ro
     networks:
       - autolock_net
     restart: always
@@ -54,6 +55,7 @@ services:
       BASE_URL: ${BASE_URL}
     volumes:
       - ./config/autolock_setting.json:/app/etc/autolock_setting.json:rw
+      - ./config/authorize_db_setting.json:/app/etc/authorize_db_setting.json:ro
     ports:
       - "8080:3000"
     networks:

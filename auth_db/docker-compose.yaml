@@ -1,0 +1,24 @@
+version: "3"
+
+services:
+  auth_db:
+    container_name: autolock_auth_db
+    image: mariadb:latest
+    environment:
+      MARIADB_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWORD}
+      MARIADB_DATABASE: ${MARIADB_DATABASE}
+      MARIADB_USER: ${MARIADB_USER}
+      MARIADB_PASSWORD: ${MARIADB_PASSWORD}
+    volumes:
+      - auth_db_volume:/var/lib/mysql
+      - ../auth_db:/docker-entrypoint-initdb.d
+    networks:
+      - autolock_net
+    restart: always
+
+networks:
+  autolock_net:
+    external: true
+
+volumes:
+  auth_db_volume:

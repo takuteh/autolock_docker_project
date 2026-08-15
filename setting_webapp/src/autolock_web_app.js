@@ -58,8 +58,7 @@ router.post("/users/post", async (req, res) => {
         console.warn("スキップ: user_name が未定義または空です");
         continue;
       }
-      // 削除対象かチェック
-      console.log(user.is_deleted);
+
       if (user.is_deleted === true) {
         await conn.query("DELETE FROM users WHERE id = ?", [user.id]);
         console.log(`削除: ${user.user_name}`);
@@ -76,6 +75,7 @@ router.post("/users/post", async (req, res) => {
 
       if (rows.length) {
         // ② 存在 → UPDATE
+        console.log("ユーザーが更新されました");
         await conn.query(
           `UPDATE users
              SET user_name   =?,
@@ -95,6 +95,7 @@ router.post("/users/post", async (req, res) => {
         );
       } else {
         // ③ 無い → INSERT
+        console.log("ユーザーが追加されました");
         await conn.query(
           `INSERT INTO users (user_name, line_id, slack_id, start_date, end_date)
            VALUES (?, ?, ?, ?, ?)`,
