@@ -12,6 +12,8 @@ services:
     volumes:
       - auth_db_volume:/var/lib/mysql
       - ../auth_db:/docker-entrypoint-initdb.d
+    ports:
+      - "3306:3306"
     networks:
       - autolock_net
     restart: always

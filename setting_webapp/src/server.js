@@ -3,8 +3,6 @@ const app = express();
 
 const webappRoutes = require("./autolock_web_app.js");
 
-const config = require("./config");
-config.setConfigFile("../etc/autolock_setting.json");
 
 app.use(express.json());
 

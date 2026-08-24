@@ -4,14 +4,17 @@ const router = express.Router();
 const config_class = require("./config");
 const pool = require("./db");
 
+const AUTOLOCK_CONFIG_FILE = "../etc/autolock_setting.json";
+
 //webappからPOSTされた設定内容をautolock_setting.jsonにmerge
 router.post("/post", (req, res) => {
   try {
     const newData = req.body;
     convertStringBools(newData);
-    const currentData = config_class.getConfig();
+    const currentData = config_class.getConfig(AUTOLOCK_CONFIG_FILE);
     const mergedData = _.merge({}, currentData, newData);
-    config_class.setConfig(mergedData);
+    console.log(mergedData);
+    config_class.setConfig("../etc/autolock_setting.json",mergedData);
     res.status(200).json(mergedData);
   } catch (err) {
     console.error(err);
@@ -24,7 +27,7 @@ router.post("/post", (req, res) => {
 //autolock_setting.jsonの内容をすべて返す
 router.get("/get", (req, res) => {
   try {
-    const config = config_class.getConfig();
+    const config = config_class.getConfig(AUTOLOCK_CONFIG_FILE);
     res.json(config);
   } catch (err) {
     console.error(err);

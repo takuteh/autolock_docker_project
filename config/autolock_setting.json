@@ -48,11 +48,5 @@
   "slack": {
     "channel_token": "token",
     "send_channel": "#general"
-  },
-  "autolock": true,
-  "timeout_seq": "no",
-  "rotate_direction": "right",
-  "ignore_clsw": true,
-  "authorize_external_users": false,
-  "authorize_internal_users": false
+  }
 }

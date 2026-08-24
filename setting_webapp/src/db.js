@@ -1,9 +1,10 @@
 // db.js
 const mysql = require("mysql2/promise");
 const config_class = require("./config");
-config_class.setConfigFile("../etc/authorize_db_setting.json");
 
-const db_config = config_class.getConfig();
+const AUTHDB_CONFIG_FILE = "../etc/authorize_db_setting.json";
+const db_config = config_class.getConfig(AUTHDB_CONFIG_FILE);
+
 
 const pool = mysql.createPool({
   host: db_config.host,
@@ -12,4 +13,5 @@ const pool = mysql.createPool({
   database: db_config.database,
 });
 
+console.log(pool);
 module.exports = pool;
