@@ -11,7 +11,6 @@ services:
       BASE_URL: ${BASE_URL}
     volumes:
       - ../config/autolock_setting.json:/app/etc/autolock_setting.json:rw
-      - ../config/authorize_db_setting.json:/app/etc/authorize_db_setting.json:ro
     ports:
       - "8080:3000"
     networks:
