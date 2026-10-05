@@ -15,7 +15,7 @@
     "timeout_seq": "no"
   },
   "mqtt": {
-    "broker_address": "autolock_mqtt_broker",
+    "broker_address": "10.0.0.228",
     "mqtt_port": 1883,
     "publish": {
       "boot": {
@@ -47,6 +47,8 @@
   },
   "slack": {
     "channel_token": "token",
-    "send_channel": "#general"
+    "send_channel": "#general",
+    "log_channel": "#general",
+    "app_operate_notify_channel": "#admin"
   }
 }
