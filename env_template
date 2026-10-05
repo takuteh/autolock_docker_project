@@ -1,5 +1,9 @@
-      MARIADB_ROOT_PASSWORD=root
+      MARIADB_HOST=autolock_auth_db
+      MARIADB_PORT=3306
       MARIADB_DATABASE=autolock_user
+      MARIADB_TABLE=users
+      MARIADB_ROOT_PASSWORD=root
       MARIADB_USER=pi
       MARIADB_PASSWORD=raspberry
+      PIGPIO_HOST=host.docker.internal
       BASE_URL=http://your_domain.com

@@ -7,7 +7,14 @@ services:
       context: autolock_main # Dockerfileが存在するディレクトリを指定
       dockerfile: Dockerfile # 使用するDockerfileを指定
     image: autolock_main_img
-    privileged: true # 特権モードを有効にする
+    environment:
+      MARIADB_HOST: ${MARIADB_HOST}
+      MARIADB_PORT: ${MARIADB_PORT}
+      MARIADB_USER: ${MARIADB_USER}
+      MARIADB_PASSWORD: ${MARIADB_PASSWORD}
+      MARIADB_DATABASE: ${MARIADB_DATABASE}
+      MARIADB_TABLE: ${MARIADB_TABLE}
+      PIGPIO_HOST: ${PIGPIO_HOST}
     volumes:
       - ./config/autolock_setting.json:/home/pi/autolock/gear_version/etc/autolock_setting.json:ro
     networks:
