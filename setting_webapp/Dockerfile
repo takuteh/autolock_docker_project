@@ -15,7 +15,7 @@ RUN git clone https://github.com/takuteh/autolock_setting_webapp.git
 
 # npm 依存関係をインストール
 RUN npm install
-RUN npm install mysql2
+RUN npm install mysql2 @kubernetes/client-node
 
 # エントリポイントを指定
 CMD ["/bin/sh", "/app/entrypoint.sh"]

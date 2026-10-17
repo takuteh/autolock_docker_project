@@ -1,8 +1,12 @@
+
 const fs = require("fs");
 const path = require("path");
 
+const PLATFORM = process.env.AUTOLOCK_PLATFORM || "docker";
+const AUTOLOCK_NAMESPACE = process.env.AUTOLOCK_NAMESPACE || "autolock";
+const AUTOLOCK_CR_NAME = process.env.AUTOLOCK_CR_NAME;
 
-function setConfig(filename, cfg) {
+function setConfigDocker(filename, cfg) {
     const configFile = path.resolve(__dirname, filename);
 
     console.log("setConfig filename:", filename);
@@ -17,12 +21,73 @@ function setConfig(filename, cfg) {
 
     console.log("setConfig completed");
 }
+
+async function setConfigKubernetes(cfg) {
+    if (!AUTOLOCK_CR_NAME) {
+        throw new Error("AUTOLOCK_CR_NAME is not configured");
+    }
+
+    const k8s = require("@kubernetes/client-node");
+    const kc = new k8s.KubeConfig();
+
+    // Pod内ではServiceAccount、ローカル開発時はkubeconfigを利用
+    kc.loadFromDefault();
+
+    const api = kc.makeApiClient(k8s.CustomObjectsApi);
+
+    // フロントから届く設定は { main: { ... } } の形式
+    const mainConfig = cfg.main;
+
+    if (!mainConfig || typeof mainConfig !== "object") {
+        throw new Error("Invalid config: cfg.main is required");
+    }
+
+    await api.patchNamespacedCustomObject({
+        group: "autolock.takuteh.uk",
+        version: "v1alpha1",
+        namespace: AUTOLOCK_NAMESPACE,
+        plural: "autolocks",
+        name: AUTOLOCK_CR_NAME,
+        body: {
+            spec: {
+                main: {
+                    config: {
+                        main: mainConfig
+                    }
+                }
+            }
+        },
+        options: {
+            headers: {
+                "Content-Type": "application/merge-patch+json"
+            }
+        }
+    });
+
+    console.log("Autolock CR patched:", AUTOLOCK_CR_NAME);
+}
+
+async function setConfig(filename, cfg) {
+    switch (PLATFORM) {
+        case "docker":
+            return setConfigDocker(filename, cfg);
+
+        case "kubernetes":
+            return setConfigKubernetes(cfg);
+
+        default:
+            throw new Error(`Unsupported AUTOLOCK_PLATFORM: ${PLATFORM}`);
+    }
+}
+
 function getConfig(filename) {
     const configFile = path.resolve(__dirname, filename);
+
     console.log("__dirname:", __dirname);
     console.log("filename:", filename);
     console.log("configFile:", configFile);
     console.log("exists:", fs.existsSync(configFile));
+
     if (!fs.existsSync(configFile)) {
         console.log("file not exist!");
         return {};
