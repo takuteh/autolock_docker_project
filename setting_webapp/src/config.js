@@ -22,48 +22,44 @@ function setConfigDocker(filename, cfg) {
     console.log("setConfig completed");
 }
 
+
 async function setConfigKubernetes(cfg) {
     if (!AUTOLOCK_CR_NAME) {
         throw new Error("AUTOLOCK_CR_NAME is not configured");
     }
 
-    const k8s = require("@kubernetes/client-node");
+    const k8s = await import("@kubernetes/client-node");
     const kc = new k8s.KubeConfig();
-
-    // Pod内ではServiceAccount、ローカル開発時はkubeconfigを利用
     kc.loadFromDefault();
 
     const api = kc.makeApiClient(k8s.CustomObjectsApi);
 
-    // フロントから届く設定は { main: { ... } } の形式
     const mainConfig = cfg.main;
-
     if (!mainConfig || typeof mainConfig !== "object") {
         throw new Error("Invalid config: cfg.main is required");
     }
 
-    await api.patchNamespacedCustomObject({
+    const response = await api.patchNamespacedCustomObject({
         group: "autolock.takuteh.uk",
         version: "v1alpha1",
         namespace: AUTOLOCK_NAMESPACE,
         plural: "autolocks",
         name: AUTOLOCK_CR_NAME,
-        body: {
-            spec: {
-                main: {
-                    config: {
-                        main: mainConfig
-                    }
-                }
+        body: [
+            {
+                op: "replace",
+                path: "/spec/main/config/main",
+                value: mainConfig
             }
-        },
+        ],
         options: {
             headers: {
-                "Content-Type": "application/merge-patch+json"
+                "Content-Type": "application/json-patch+json"
             }
         }
     });
 
+    console.log("PATCH response:", JSON.stringify(response, null, 2));
     console.log("Autolock CR patched:", AUTOLOCK_CR_NAME);
 }
 
